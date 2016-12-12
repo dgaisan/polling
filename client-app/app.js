@@ -18,6 +18,8 @@ class App extends Component {
 		this._onConnect = this._onConnect.bind(this);
 		this._onDisconnect = this._onDisconnect.bind(this);
 		this._onWelcome = this._onWelcome.bind(this);
+		this._onJoined = this._onJoined.bind(this);
+		this.emit = this.emit.bind(this);
 
 		// connecting to the server
 		this.socket = io(SERVER_ENDPOINT);
@@ -26,13 +28,15 @@ class App extends Component {
 		this.socket.on('connect', this._onConnect);
 		this.socket.on('disconnect', this._onDisconnect);
 		this.socket.on('welcome', this._onWelcome);
+		this.socket.on('joined', this._onJoined);
 	}
 
 	// Setting up initial state
 	_setUpInitialState() {
 		this.state = {
 			status: 'disconnected',
-			title: ''
+			title: '',
+			member: {}
 		};
 	}
 
@@ -54,13 +58,23 @@ class App extends Component {
 		this.setState({ title: serverState.title });
 	}
 
+	_onJoined(member) {
+		this.setState({member: member});
+	}
+
+	emit(eventName, payload) {
+		this.socket.emit(eventName, payload);
+	}
+
 	render() {
 		const that = this;
 		const childrenWithProps = React.Children.map(
 			this.props.children,
    		(child) => React.cloneElement(child, {
      			status: that.state.status,
-     			title: that.state.title
+     			title: that.state.title,
+					member: this.state.member,
+					emit: that.emit
    		})
     );
 

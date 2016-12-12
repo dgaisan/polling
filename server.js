@@ -24,6 +24,8 @@ socketServer.sockets.on('connection', function(socket) {
 	// register socket disconnect listener
 	socket.once('disconnect', onSocketDisconnect.bind(this, socket));
 
+	socket.on('join', onMemberJoined);
+
 	// Broadcasting a welcome message
 	socket.emit('welcome', { title: title });
 
@@ -40,6 +42,15 @@ function onSocketDisconnect(socket) {
 	socket.disconnect();
 
 	console.log('Remaining number of live connections:', liveSockets.length);
+}
+
+function onMemberJoined(payload) {
+	console.log(`A new member joined the conference: ${payload.name}`);
+	var newMember = {
+		id: this.id,
+		name: payload.name
+	}
+	this.emit('joined', newMember);
 }
 
 console.log('The Server is running');

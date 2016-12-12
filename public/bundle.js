@@ -64,15 +64,15 @@
 
 	var _visitor2 = _interopRequireDefault(_visitor);
 
-	var _speaker = __webpack_require__(286);
+	var _speaker = __webpack_require__(287);
 
 	var _speaker2 = _interopRequireDefault(_speaker);
 
-	var _board = __webpack_require__(287);
+	var _board = __webpack_require__(288);
 
 	var _board2 = _interopRequireDefault(_board);
 
-	var _pagenotfound = __webpack_require__(288);
+	var _pagenotfound = __webpack_require__(289);
 
 	var _pagenotfound2 = _interopRequireDefault(_pagenotfound);
 
@@ -27468,6 +27468,8 @@
 			_this._onConnect = _this._onConnect.bind(_this);
 			_this._onDisconnect = _this._onDisconnect.bind(_this);
 			_this._onWelcome = _this._onWelcome.bind(_this);
+			_this._onJoined = _this._onJoined.bind(_this);
+			_this.emit = _this.emit.bind(_this);
 
 			// connecting to the server
 			_this.socket = (0, _socket2.default)(SERVER_ENDPOINT);
@@ -27476,6 +27478,7 @@
 			_this.socket.on('connect', _this._onConnect);
 			_this.socket.on('disconnect', _this._onDisconnect);
 			_this.socket.on('welcome', _this._onWelcome);
+			_this.socket.on('joined', _this._onJoined);
 			return _this;
 		}
 
@@ -27487,7 +27490,8 @@
 			value: function _setUpInitialState() {
 				this.state = {
 					status: 'disconnected',
-					title: ''
+					title: '',
+					member: {}
 				};
 			}
 
@@ -27518,13 +27522,27 @@
 				this.setState({ title: serverState.title });
 			}
 		}, {
+			key: '_onJoined',
+			value: function _onJoined(member) {
+				this.setState({ member: member });
+			}
+		}, {
+			key: 'emit',
+			value: function emit(eventName, payload) {
+				this.socket.emit(eventName, payload);
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+
 				var that = this;
 				var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
 					return _react2.default.cloneElement(child, {
 						status: that.state.status,
-						title: that.state.title
+						title: that.state.title,
+						member: _this2.state.member,
+						emit: that.emit
 					});
 				});
 
@@ -35079,6 +35097,10 @@
 
 	var _display2 = _interopRequireDefault(_display);
 
+	var _joinForm = __webpack_require__(286);
+
+	var _joinForm2 = _interopRequireDefault(_joinForm);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35106,9 +35128,30 @@
 						_display2.default,
 						{ show: this.props.status === 'connected' },
 						_react2.default.createElement(
-							'h2',
-							null,
-							'Join the conference!'
+							_display2.default,
+							{ show: this.props.member.name },
+							_react2.default.createElement(
+								'h2',
+								null,
+								' Welcome ',
+								this.props.member.name,
+								'! '
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								'...'
+							)
+						),
+						_react2.default.createElement(
+							_display2.default,
+							{ show: !this.props.member.name },
+							_react2.default.createElement(
+								'h2',
+								null,
+								'Join the conference!'
+							),
+							_react2.default.createElement(_joinForm2.default, { emit: this.props.emit })
 						)
 					)
 				);
@@ -35176,6 +35219,75 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var JoinForm = function (_Component) {
+	  _inherits(JoinForm, _Component);
+
+	  function JoinForm() {
+	    _classCallCheck(this, JoinForm);
+
+	    var _this = _possibleConstructorReturn(this, (JoinForm.__proto__ || Object.getPrototypeOf(JoinForm)).call(this));
+
+	    _this.join = _this.join.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(JoinForm, [{
+	    key: 'join',
+	    value: function join() {
+	      this.props.emit('join', { name: this.textInput.value });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'form',
+	        { action: 'javascript:void(0)', onSubmit: this.join },
+	        _react2.default.createElement('input', { ref: function ref(input) {
+	            _this2.textInput = input;
+	          },
+	          className: 'form-control',
+	          placeholder: 'Enter your full name',
+	          required: true }),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'btn btn-primary' },
+	          'Join the Conference'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return JoinForm;
+	}(_react.Component);
+
+	exports.default = JoinForm;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
@@ -35220,7 +35332,7 @@
 	exports.default = Speaker;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35269,7 +35381,7 @@
 	exports.default = Board;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
