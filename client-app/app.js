@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import io from 'socket.io-client';
 
-import Header from './headers/header';
+import Header from './views/header';
 
 const SERVER_ENDPOINT = 'http://localhost:3000';
 
@@ -56,14 +56,13 @@ class App extends Component {
 
 	render() {
 		const that = this;
-		const childrenWithProps = React.Children.map(this.props.children,
-     		(child) => React.cloneElement(child, {
-       			status: that.state.status,
-       			title: that.state.title
-     		})
-    	);
-
-    	console.log(childrenWithProps);
+		const childrenWithProps = React.Children.map(
+			this.props.children,
+   		(child) => React.cloneElement(child, {
+     			status: that.state.status,
+     			title: that.state.title
+   		})
+    );
 
 		return (
 			<div>

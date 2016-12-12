@@ -64,15 +64,15 @@
 
 	var _visitor2 = _interopRequireDefault(_visitor);
 
-	var _speaker = __webpack_require__(285);
+	var _speaker = __webpack_require__(286);
 
 	var _speaker2 = _interopRequireDefault(_speaker);
 
-	var _board = __webpack_require__(286);
+	var _board = __webpack_require__(287);
 
 	var _board2 = _interopRequireDefault(_board);
 
-	var _pagenotfound = __webpack_require__(287);
+	var _pagenotfound = __webpack_require__(288);
 
 	var _pagenotfound2 = _interopRequireDefault(_pagenotfound);
 
@@ -27528,8 +27528,6 @@
 					});
 				});
 
-				console.log(childrenWithProps);
-
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -35077,6 +35075,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _display = __webpack_require__(285);
+
+	var _display2 = _interopRequireDefault(_display);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -35096,17 +35098,19 @@
 
 		_createClass(Visitor, [{
 			key: 'render',
-
-			//	constructor(props) {
-			//super(props);
-			//	}
-
 			value: function render() {
 				return _react2.default.createElement(
-					'h1',
+					'div',
 					null,
-					'Visitor : ',
-					this.props.status
+					_react2.default.createElement(
+						_display2.default,
+						{ show: this.props.status === 'connected' },
+						_react2.default.createElement(
+							'h2',
+							null,
+							'Join the conference!'
+						)
+					)
 				);
 			}
 		}]);
@@ -35118,6 +35122,55 @@
 
 /***/ },
 /* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Display = function (_Component) {
+		_inherits(Display, _Component);
+
+		function Display() {
+			_classCallCheck(this, Display);
+
+			return _possibleConstructorReturn(this, (Display.__proto__ || Object.getPrototypeOf(Display)).apply(this, arguments));
+		}
+
+		_createClass(Display, [{
+			key: 'render',
+			value: function render() {
+				return this.props.show ? _react2.default.createElement(
+					'div',
+					null,
+					this.props.children
+				) : null;
+			}
+		}]);
+
+		return Display;
+	}(_react.Component);
+
+	exports.default = Display;
+
+/***/ },
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35167,7 +35220,7 @@
 	exports.default = Speaker;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35216,7 +35269,7 @@
 	exports.default = Board;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

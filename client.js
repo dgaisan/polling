@@ -2,12 +2,11 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import {Router, Route, IndexRoute, Link, browserHistory} from 'react-router';
 
-
-import App from './components/app';
-import Visitor from './components/visitor';
-import Speaker from './components/speaker';
-import Board from './components/board';
-import PageNotFound from './components/pagenotfound';
+import App from './client-app/app';
+import Visitor from './client-app/pages/visitor';
+import Speaker from './client-app/pages/speaker';
+import Board from './client-app/pages/board';
+import PageNotFound from './client-app/pages/pagenotfound';
 
 const routes = (
 	<Router history={browserHistory}>
