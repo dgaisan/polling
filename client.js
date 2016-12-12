@@ -11,13 +11,13 @@ import PageNotFound from './components/pagenotfound';
 
 const routes = (
 	<Router history={browserHistory}>
-		<Route path='/' component={App}> 
+		<Route path='/' component={App}>
 			<IndexRoute component={Visitor}></IndexRoute>
 			<Route path='speaker' component={Speaker}></Route>
 			<Route path='board' component={Board}></Route>
+			<Route path="*" component={PageNotFound}></Route>
 		</Route>
-		<Route path="*" component={PageNotFound}></Route>
-	</Router> 
+	</Router>
 );
 
 // Rendering Main Component

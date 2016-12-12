@@ -86,9 +86,9 @@
 			{ path: '/', component: _app2.default },
 			_react2.default.createElement(_reactRouter.IndexRoute, { component: _visitor2.default }),
 			_react2.default.createElement(_reactRouter.Route, { path: 'speaker', component: _speaker2.default }),
-			_react2.default.createElement(_reactRouter.Route, { path: 'board', component: _board2.default })
-		),
-		_react2.default.createElement(_reactRouter.Route, { path: '*', component: _pagenotfound2.default })
+			_react2.default.createElement(_reactRouter.Route, { path: 'board', component: _board2.default }),
+			_react2.default.createElement(_reactRouter.Route, { path: '*', component: _pagenotfound2.default })
+		)
 	);
 
 	// Rendering Main Component
@@ -27507,9 +27507,9 @@
 				this.setState({ status: 'disconnected' });
 			}
 
-			/** 
+			/**
 	  * Fired when 'Welcome' event is emmited
-	  * @param {string} state - state of the server  
+	  * @param {string} state - state of the server
 	  */
 
 		}, {
@@ -27520,11 +27520,21 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var that = this;
+				var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
+					return _react2.default.cloneElement(child, {
+						status: that.state.status,
+						title: that.state.title
+					});
+				});
+
+				console.log(childrenWithProps);
+
 				return _react2.default.createElement(
 					'div',
 					null,
 					_react2.default.createElement(_header2.default, { title: this.state.title, status: this.state.status }),
-					this.props.children
+					childrenWithProps
 				);
 			}
 		}]);
@@ -35086,11 +35096,17 @@
 
 		_createClass(Visitor, [{
 			key: 'render',
+
+			//	constructor(props) {
+			//super(props);
+			//	}
+
 			value: function render() {
 				return _react2.default.createElement(
 					'h1',
 					null,
-					'Visitor'
+					'Visitor : ',
+					this.props.status
 				);
 			}
 		}]);
@@ -35139,7 +35155,8 @@
 				return _react2.default.createElement(
 					'h1',
 					null,
-					'Speaker'
+					'Speaker : ',
+					this.props.status
 				);
 			}
 		}]);
@@ -35202,7 +35219,7 @@
 /* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -35213,6 +35230,8 @@
 	var _react = __webpack_require__(166);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(172);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35232,24 +35251,50 @@
 	  }
 
 	  _createClass(PageNotFound, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
+	        'div',
 	        null,
 	        _react2.default.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "Page Not Found."
+	          'Page Not Found.'
 	        ),
 	        _react2.default.createElement(
-	          "p",
+	          'p',
 	          null,
-	          "Go to ",
+	          'Go to:'
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          null,
 	          _react2.default.createElement(
-	            _react.Link,
-	            { to: "/" },
-	            "Home Page"
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/' },
+	              'Home Page'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/speaker' },
+	              'Speaker'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
+	              { to: '/board' },
+	              'View the board'
+	            )
 	          )
 	        )
 	      );

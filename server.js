@@ -1,12 +1,17 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 
-var title = 'Untitled'; // Title of the talk
+var title = 'Awesome Conference Title!'; // Title of the talk
 var liveSockets = []; // Array of live socket connections
 
 // serving static files
 app.use(express.static('./public'));
 app.use(express.static('./node_modules/bootstrap/dist'));
+
+app.use('/*', function(req, res) {
+	res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+});
 
 // starting up the server
 var httpServer = app.listen(3000);

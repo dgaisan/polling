@@ -46,19 +46,29 @@ class App extends Component {
 		this.setState({status: 'disconnected'});
 	}
 
-	/** 
+	/**
 	* Fired when 'Welcome' event is emmited
-	* @param {string} state - state of the server  
+	* @param {string} state - state of the server
 	*/
 	_onWelcome(serverState) {
 		this.setState({ title: serverState.title });
 	}
 
 	render() {
+		const that = this;
+		const childrenWithProps = React.Children.map(this.props.children,
+     		(child) => React.cloneElement(child, {
+       			status: that.state.status,
+       			title: that.state.title
+     		})
+    	);
+
+    	console.log(childrenWithProps);
+
 		return (
 			<div>
 				<Header title={this.state.title} status={this.state.status} />
-				{this.props.children}
+				{childrenWithProps}
 			</div>
 		);
 	}
