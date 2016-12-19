@@ -19,6 +19,7 @@ class App extends Component {
 		this._onDisconnect = this._onDisconnect.bind(this);
 		this._onWelcome = this._onWelcome.bind(this);
 		this._onJoined = this._onJoined.bind(this);
+		this._updateVisitors = this._updateVisitors.bind(this);
 		this.emit = this.emit.bind(this);
 
 		// connecting to the server
@@ -29,6 +30,7 @@ class App extends Component {
 		this.socket.on('disconnect', this._onDisconnect);
 		this.socket.on('welcome', this._onWelcome);
 		this.socket.on('joined', this._onJoined);
+		this.socket.on('visitors', this._updateVisitors);
 	}
 
 	// Setting up initial state
@@ -36,7 +38,8 @@ class App extends Component {
 		this.state = {
 			status: 'disconnected',
 			title: '',
-			member: {}
+			member: {},
+			visitors: [],
 		};
 	}
 
@@ -58,8 +61,14 @@ class App extends Component {
 		this.setState({ title: serverState.title });
 	}
 
-	_onJoined(member) {
-		this.setState({member: member});
+	_onJoined(serverState) {
+		console.log('a new member joined:', serverState);
+		this.setState({member: serverState});
+	}
+
+	_updateVisitors(serverState) {
+		console.log('updating visitors', serverState);
+		this.setState({visitors: serverState.visitors});
 	}
 
 	emit(eventName, payload) {
@@ -73,7 +82,8 @@ class App extends Component {
    		(child) => React.cloneElement(child, {
      			status: that.state.status,
      			title: that.state.title,
-					member: this.state.member,
+					member: that.state.member,
+					visitors: that.state.visitors,
 					emit: that.emit
    		})
     );

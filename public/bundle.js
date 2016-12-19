@@ -222,6 +222,8 @@
 /* 3 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	// shim for using process in browser
 	var process = module.exports = {};
 
@@ -27469,6 +27471,7 @@
 			_this._onDisconnect = _this._onDisconnect.bind(_this);
 			_this._onWelcome = _this._onWelcome.bind(_this);
 			_this._onJoined = _this._onJoined.bind(_this);
+			_this._updateVisitors = _this._updateVisitors.bind(_this);
 			_this.emit = _this.emit.bind(_this);
 
 			// connecting to the server
@@ -27479,6 +27482,7 @@
 			_this.socket.on('disconnect', _this._onDisconnect);
 			_this.socket.on('welcome', _this._onWelcome);
 			_this.socket.on('joined', _this._onJoined);
+			_this.socket.on('visitors', _this._updateVisitors);
 			return _this;
 		}
 
@@ -27491,7 +27495,8 @@
 				this.state = {
 					status: 'disconnected',
 					title: '',
-					member: {}
+					member: {},
+					visitors: []
 				};
 			}
 
@@ -27523,8 +27528,15 @@
 			}
 		}, {
 			key: '_onJoined',
-			value: function _onJoined(member) {
-				this.setState({ member: member });
+			value: function _onJoined(serverState) {
+				console.log('a new member joined:', serverState);
+				this.setState({ member: serverState });
+			}
+		}, {
+			key: '_updateVisitors',
+			value: function _updateVisitors(serverState) {
+				console.log('updating visitors', serverState);
+				this.setState({ visitors: serverState.visitors });
 			}
 		}, {
 			key: 'emit',
@@ -27534,14 +27546,13 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
-
 				var that = this;
 				var childrenWithProps = _react2.default.Children.map(this.props.children, function (child) {
 					return _react2.default.cloneElement(child, {
 						status: that.state.status,
 						title: that.state.title,
-						member: _this2.state.member,
+						member: that.state.member,
+						visitors: that.state.visitors,
 						emit: that.emit
 					});
 				});
@@ -29624,6 +29635,8 @@
 /***/ },
 /* 244 */
 /***/ function(module, exports) {
+
+	"use strict";
 
 	module.exports = function (module) {
 		if (!module.webpackPolyfill) {
@@ -35136,6 +35149,12 @@
 								' Welcome ',
 								this.props.member.name,
 								'! '
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								this.props.visitors.length,
+								' visitor(s) are/is connected to this event.'
 							),
 							_react2.default.createElement(
 								'p',

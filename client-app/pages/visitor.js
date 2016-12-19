@@ -9,6 +9,7 @@ export default class Visitor extends Component {
 				<Display show={this.props.status === 'connected'}>
 					<Display show={this.props.member.name}>
 						<h2> Welcome {this.props.member.name}! </h2>
+						<p>{this.props.visitors.length} visitor(s) are/is connected to this event.</p>
 						<p>...</p>
 					</Display>
 					<Display show={!this.props.member.name}>

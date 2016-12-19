@@ -4,6 +4,7 @@ var path = require('path');
 
 var title = 'Awesome Conference Title!'; // Title of the talk
 var liveSockets = []; // Array of live socket connections
+var visitors = [];
 
 // serving static files
 app.use(express.static('./public'));
@@ -39,6 +40,12 @@ socketServer.sockets.on('connection', function(socket) {
 function onSocketDisconnect(socket) {
 	var index = liveSockets.indexOf(socket);
 	liveSockets.splice(index, 1);
+	var visitorsIndex = visitors.findIndex(function(item) { return item.id === socket.id });
+
+	if (~visitorsIndex) {
+		visitors.splice(visitorsIndex, 1);
+		socketServer.sockets.emit('visitors', {visitors: visitors});
+	}
 	socket.disconnect();
 
 	console.log('Remaining number of live connections:', liveSockets.length);
@@ -51,6 +58,8 @@ function onMemberJoined(payload) {
 		name: payload.name
 	}
 	this.emit('joined', newMember);
+	visitors.push(newMember);
+	socketServer.sockets.emit('visitors', {visitors: visitors});
 }
 
 console.log('The Server is running');
